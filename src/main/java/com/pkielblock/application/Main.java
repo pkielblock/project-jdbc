@@ -7,10 +7,12 @@ import com.pkielblock.model.entities.Seller;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
         SellerDao sellerDao = DaoFactory.createSellerDao();
+        Scanner sc = new Scanner(System.in);
 
         System.out.println("=== Test 1: Seller findById ===");
         Seller seller = sellerDao.findById(3);
@@ -39,5 +41,10 @@ public class Main {
         seller.setName("Martha Wayne");
         sellerDao.update(seller);
         System.out.println("Update Completed");
+
+        System.out.println("\n=== Test 6: Seller delete ===");
+        System.out.print("ID to delete: ");
+        int id = sc.nextInt();
+        sellerDao.deleteById(id);
     }
 }

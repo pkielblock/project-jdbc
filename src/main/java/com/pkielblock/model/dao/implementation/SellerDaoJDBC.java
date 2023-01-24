@@ -1,6 +1,7 @@
 package com.pkielblock.model.dao.implementation;
 
 import com.pkielblock.db.DbException;
+import com.pkielblock.db.DbIntegrityException;
 import com.pkielblock.model.dao.SellerDao;
 import com.pkielblock.model.entities.Department;
 import com.pkielblock.model.entities.Seller;
@@ -74,7 +75,23 @@ public class SellerDaoJDBC implements SellerDao {
 
     @Override
     public void deleteById(Integer id) {
+        PreparedStatement stmt = null;
 
+        try {
+            stmt = conn.prepareStatement("DELETE FROM seller WHERE Id = ?");
+            stmt.setInt(1, id);
+            int rowsAffected = stmt.executeUpdate();
+
+            if (rowsAffected > 0) {
+                System.out.println("Deleted ID = " + id);
+            } else {
+                throw new DbException("Unexpected Error: No Rows Affected");
+            }
+        } catch (SQLException e) {
+            throw new DbException(e.getMessage());
+        } finally {
+            DB.closeStatement(stmt);
+        }
     }
 
     @Override
