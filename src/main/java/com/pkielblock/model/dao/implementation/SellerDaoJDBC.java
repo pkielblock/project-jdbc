@@ -39,7 +39,7 @@ public class SellerDaoJDBC implements SellerDao {
                 ResultSet rs = stmt.getGeneratedKeys();
                 if (rs.next()) {
                     int id = rs.getInt(1);
-                    obj.setId(1);
+                    obj.setId(id);
                 }
                 DB.closeResultSet(rs);
             } else {
