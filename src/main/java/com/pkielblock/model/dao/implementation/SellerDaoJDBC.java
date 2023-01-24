@@ -6,10 +6,7 @@ import com.pkielblock.model.entities.Department;
 import com.pkielblock.model.entities.Seller;
 import com.pkielblock.db.DB;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -25,7 +22,33 @@ public class SellerDaoJDBC implements SellerDao {
 
     @Override
     public void insert(Seller obj) {
+        PreparedStatement stmt = null;
 
+        try {
+            stmt = conn.prepareStatement("INSERT INTO seller (Name, Email, BirthDate, BaseSalary, DepartmentId) VALUES (?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+            stmt.setString(1, obj.getName());
+            stmt.setString(2, obj.getEmail());
+            stmt.setDate(3, new Date(obj.getBithDate().getTime()));
+            stmt.setDouble(4, obj.getBaseSalary());
+            stmt.setInt(5, obj.getDepartment().getId());
+
+            int rowsAffected = stmt.executeUpdate();
+
+            if (rowsAffected > 0) {
+                ResultSet rs = stmt.getGeneratedKeys();
+                if (rs.next()) {
+                    int id = rs.getInt(1);
+                    obj.setId(1);
+                }
+                DB.closeResultSet(rs);
+            } else {
+                throw new DbException("Unexpected Error: No Rows Affected");
+            }
+        } catch (SQLException e) {
+            throw new DbException(e.getMessage());
+        } finally {
+            DB.closeStatement(stmt);
+        }
     }
 
     @Override
