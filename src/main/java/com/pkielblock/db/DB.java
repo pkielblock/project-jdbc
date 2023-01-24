@@ -8,7 +8,7 @@ import java.util.Properties;
 public class DB {
     private static Connection conn = null;
 
-    private static Properties loadProperties() {
+    public static Properties loadProperties() {
         try (FileInputStream fs = new FileInputStream("db.properties")) {
             Properties props = new Properties();
             props.load(fs);
@@ -18,7 +18,7 @@ public class DB {
         }
     }
 
-    private static Connection getConnection() {
+    public static Connection getConnection() {
         try {
             if (conn == null) {
                 Properties props = loadProperties();
@@ -31,7 +31,7 @@ public class DB {
         return conn;
     }
 
-    private static void closeConnection() {
+    public static void closeConnection() {
         try {
             if (conn != null) {
                 conn.close();
@@ -41,7 +41,7 @@ public class DB {
         }
     }
 
-    private static void closeStatement(Statement stmt) {
+    public static void closeStatement(Statement stmt) {
         try {
             if (stmt != null) {
                 stmt.close();
@@ -51,7 +51,7 @@ public class DB {
         }
     }
 
-    private static void closeResultSet(ResultSet rs) {
+    public static void closeResultSet(ResultSet rs) {
         try {
             if (rs != null) {
                 rs.close();
